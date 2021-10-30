@@ -1,0 +1,38 @@
+{% extends "blog/layout.html" %}
+{% block content %}
+    <h2>Articulos</h2>
+    {% if seccion_seleccionada %}
+        <div class="alert alert-info" role="alert">{{ seccion_seleccionada }}</div>
+    {% else %}
+        <div class="alert alert-info" role="alert">Todos los Articulos</div>
+    {% endif %}
+    <ul>
+        {% for un_articulo in lista_articulos %}
+            <li>              
+                <a href="{% url 'sitio:articulo' un_articulo.id %}">Ver #{{un_articulo.id}}</a> /                
+                {% if perms.sitio.change_articulo %}
+                <a href="{% url 'sitio:articulo_editar' un_articulo.id %}">Modificar</a> / 
+                {% endif %}
+                {% if perms.sitio.delete_articulo %} 
+                <a href="{% url 'sitio:articulo_eliminar' un_articulo.id %}">Eliminar</a>  
+                {% endif %}
+                --- {{un_articulo}}
+            </li>
+        {% empty %}
+            <li>No hay articulos en ésta Sección.</li>
+        {% endfor %}
+    </ul>
+    {% if perms.sitio.add_articulo %}
+    <a href="{% url 'sitio:articulo_alta'%}">Escribir un Articulo</a>
+    <br>
+    <br>
+    <h3>Leer mas tarde</h3>
+    <ul>
+        {% for articulo in leer_mas_tarde %}
+            <li>{{articulo}}</li>
+        {% empty %}
+            <li>No hay articulos para leer mas tarde.</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}
